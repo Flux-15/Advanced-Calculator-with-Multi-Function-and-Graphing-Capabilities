@@ -1,0 +1,191 @@
+% © 2024 Om Patel [omspatel15@gmail.com]
+% Advanced Calculator with Multi-Function and Graphing Capabilities
+
+
+% Load the Symbolic Math Toolbox
+if ~exist('sym', 'file')
+    error('Symbolic Math Toolbox is required for this calculator.');
+end
+
+% Display options
+disp('Welcome to the Advanced Calculator with Multi-Function and Graphing!');
+disp('Choose an operation:');
+disp('1. Basic Operations (Addition, Subtraction, etc.)');
+disp('2. Solve an Equation');
+disp('3. Plot an Equation');
+disp('4. Solve and Plot an Equation');
+disp('5. Exit');
+
+% Get user input for operation
+operation = input('Enter the number corresponding to the operation: ');
+
+switch operation
+    case 1
+        % Basic Operations
+        disp('Basic Operations:');
+        disp('1. Addition');
+        disp('2. Subtraction');
+        disp('3. Multiplication');
+        disp('4. Division');
+        disp('5. Exponentiation (x^y)');
+        disp('6. Square Root');
+        disp('7. Logarithm (base 10)');
+        disp('8. Natural Logarithm (base e)');
+        disp('9. Sine (in degrees)');
+        disp('10. Cosine (in degrees)');
+        disp('11. Tangent (in degrees)');
+
+        basic_op = input('Enter the number corresponding to the basic operation: ');
+
+        switch basic_op
+            case 1
+                num1 = input('Enter the first number: ');
+                num2 = input('Enter the second number: ');
+                result = num1 + num2;
+                disp(['Result: ', num2str(result)]);
+            case 2
+                num1 = input('Enter the first number: ');
+                num2 = input('Enter the second number: ');
+                result = num1 - num2;
+                disp(['Result: ', num2str(result)]);
+            case 3
+                num1 = input('Enter the first number: ');
+                num2 = input('Enter the second number: ');
+                result = num1 * num2;
+                disp(['Result: ', num2str(result)]);
+            case 4
+                num1 = input('Enter the numerator: ');
+                num2 = input('Enter the denominator: ');
+                if num2 ~= 0
+                    result = num1 / num2;
+                    disp(['Result: ', num2str(result)]);
+                else
+                    disp('Error: Division by zero is not allowed.');
+                end
+            case 5
+                base = input('Enter the base number (x): ');
+                exponent = input('Enter the exponent (y): ');
+                result = base ^ exponent;
+                disp(['Result: ', num2str(result)]);
+            case 6
+                num = input('Enter the number: ');
+                if num >= 0
+                    result = sqrt(num);
+                    disp(['Result: ', num2str(result)]);
+                else
+                    disp('Error: Square root of a negative number is not allowed.');
+                end
+            case 7
+                num = input('Enter the number: ');
+                if num > 0
+                    result = log10(num);
+                    disp(['Result: ', num2str(result)]);
+                else
+                    disp('Error: Logarithm of a non-positive number is not allowed.');
+                end
+            case 8
+                num = input('Enter the number: ');
+                if num > 0
+                    result = log(num);
+                    disp(['Result: ', num2str(result)]);
+                else
+                    disp('Error: Natural logarithm of a non-positive number is not allowed.');
+                end
+            case 9
+                angle = input('Enter the angle in degrees: ');
+                result = sind(angle);
+                disp(['Result: ', num2str(result)]);
+            case 10
+                angle = input('Enter the angle in degrees: ');
+                result = cosd(angle);
+                disp(['Result: ', num2str(result)]);
+            case 11
+                angle = input('Enter the angle in degrees: ');
+                result = tand(angle);
+                disp(['Result: ', num2str(result)]);
+            otherwise
+                disp('Invalid basic operation selected.');
+        end
+
+    case 2
+        % Solve an Equation
+        eq = input('Enter the equation to solve (e.g., "x^2 + 3*x - 4 = 0"): ', 's');
+        try
+            % Convert string to symbolic expression
+            eq_sym = str2sym(eq);
+            % Solve the equation
+            solutions = solve(eq_sym);
+            disp('Solutions:');
+            disp(solutions);
+        catch ME
+            disp('Error in solving the equation:');
+            disp(ME.message);
+        end
+        
+    case 3
+        % Plot an Equation
+        eq = input('Enter the equation to plot (e.g., "sin(x)"): ', 's');
+        try
+            % Convert string to symbolic expression
+            eq_sym = str2sym(eq);
+            % Define the variable and range
+            x = linspace(-10, 10, 1000);
+            % Convert symbolic expression to function
+            f = matlabFunction(eq_sym);
+            % Compute y values
+            y = f(x);
+            % Plot the function
+            figure;
+            plot(x, real(y)); % Only plot the real part
+            xlabel('x');
+            ylabel('f(x)');
+            title(['Plot of ', char(eq_sym)]);
+            grid on;
+        catch ME
+            disp('Error in plotting the equation:');
+            disp(ME.message);
+        end
+        
+    case 4
+        % Solve and Plot
+        eq = input('Enter the equation to solve and plot (e.g., "x^2 - 4"): ', 's');
+        try
+            % Convert string to symbolic expression
+            eq_sym = str2sym(eq);
+            
+            % Solve the equation
+            solutions = solve(eq_sym);
+            disp('Solutions:');
+            disp(solutions);
+            
+            % Plot the equation
+            f = matlabFunction(eq_sym);
+            x = linspace(min(double(solutions)) - 10, max(double(solutions)) + 10, 1000);
+            y = f(x);
+            
+            % Create a figure
+            figure;
+            plot(x, real(y)); % Only plot the real part
+            hold on;
+            % Plot solutions
+            plot(double(solutions), zeros(size(solutions)), 'ro', 'MarkerSize', 10);
+            hold off;
+            
+            xlabel('x');
+            ylabel('f(x)');
+            title(['Plot of ', char(eq_sym), ' with Solutions']);
+            grid on;
+            legend('f(x)', 'Solutions');
+            
+        catch ME
+            disp('Error in solving or plotting the equation:');
+            disp(ME.message);
+        end
+        
+    case 5
+        disp('Exiting the calculator.');
+        return;
+        
+    otherwise
+        disp('Invalid operation selected.');
+end

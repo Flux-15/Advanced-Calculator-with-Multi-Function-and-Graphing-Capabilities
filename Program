@@ -1,4 +1,6 @@
+% © 2024 Om Patel [omspatel15@gmail.com]
 % Advanced Calculator with Multi-Function and Graphing Capabilities
+
 
 % Load the Symbolic Math Toolbox
 if ~exist('sym', 'file')
